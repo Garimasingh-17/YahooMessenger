@@ -10,9 +10,10 @@ dotenv.config();
 
 const authRoutes = require("./routes/auth");
 const chatPasswordRoutes = require("./routes/chatPasswords");
+const Message = require("./models/message");
 
 const app = express();
-const server = http.createServer(app); // Use HTTP server for socket.io
+const server = http.createServer(app);
 const io = new Server(server, {
   cors: { origin: "*" }
 });
@@ -26,11 +27,11 @@ mongoose.connect(process.env.MONGO_URI)
 app.use(cors());
 app.use(express.json());
 
-// ✅ Routes
+// ✅ API Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/chat-password", chatPasswordRoutes);
 
-// ✅ Serve Frontend
+// ✅ Static Frontend
 app.use("/", express.static(path.join(__dirname, "YahooLogin")));
 app.use("/messenger", express.static(path.join(__dirname, "YahooMessenger")));
 
@@ -38,38 +39,47 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "YahooLogin", "index.html"));
 });
 
-// ✅ Socket.IO: Real-time chat logic
-const users = new Map(); // username => Set of socket ids
- // socket.id => username
+// ✅ Socket.IO Real-time Chat Logic
+const users = new Map(); // username => Set of socket IDs
 
 io.on("connection", (socket) => {
   console.log("🟢 User connected:", socket.id);
 
-socket.on("register", (username) => {
+  socket.on("register", (username) => {
     if (!users.has(username)) {
       users.set(username, new Set());
     }
     users.get(username).add(socket.id);
-    socket.username = username; // Save it for disconnect
+    socket.username = username;
     console.log(`✅ ${username} registered on socket ${socket.id}`);
   });
-socket.on("send-message", ({ to, message, filename, isImage }) => {
-  const sender = socket.username;
-  if (!sender) return;
 
-  if (users.has(to)) {
-    for (let targetSocketId of users.get(to)) {
-      io.to(targetSocketId).emit("receive-message", {
-        from: sender,
-        message,
-        filename,
-        isImage
-      });
+  socket.on("send-message", async ({ to, message, filename, isImage }) => {
+    const sender = socket.username;
+    if (!sender) return;
+
+    // ✅ Save message to MongoDB
+    const newMessage = new Message({
+      sender,
+      receiver: to,
+      message
+    });
+    await newMessage.save();
+
+    // ✅ Emit to recipient(s)
+    if (users.has(to)) {
+      for (let targetSocketId of users.get(to)) {
+        io.to(targetSocketId).emit("receive-message", {
+          from: sender,
+          message,
+          filename,
+          isImage
+        });
+      }
     }
-  }
-});
+  });
 
- socket.on("disconnect", () => {
+  socket.on("disconnect", () => {
     const username = socket.username;
     if (username && users.has(username)) {
       users.get(username).delete(socket.id);
@@ -81,7 +91,26 @@ socket.on("send-message", ({ to, message, filename, isImage }) => {
   });
 });
 
-// ✅ Start Server (now using HTTP server)
+// ✅ API to Get Chat History Between Two Users
+app.get("/api/messages/:user1/:user2", async (req, res) => {
+  const { user1, user2 } = req.params;
+
+  try {
+    const messages = await Message.find({
+      $or: [
+        { sender: user1, receiver: user2 },
+        { sender: user2, receiver: user1 }
+      ]
+    }).sort({ timestamp: 1 });
+
+    res.json(messages);
+  } catch (err) {
+    console.error("❌ Failed to fetch messages:", err);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+// ✅ Start Server
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => {
   console.log(`🚀 Server running at http://localhost:${PORT}`);
