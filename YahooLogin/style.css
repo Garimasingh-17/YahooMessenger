@@ -1,0 +1,155 @@
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom, #e1b7e6, #ffffff); /* Gradient from light violet to white */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .login-container {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 300px;
+        }
+        h2 {
+            text-align: center;
+            color: #4b0082;
+        }
+        .input-group {
+            margin: 15px auto; /* center group */
+            width: 95%; /* reduce width for centering */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .input-group label {
+            color: #333;
+            margin-bottom: 5px;
+            align-self: flex-start; /* keep label aligned left */
+        }
+        .input-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .login-button {
+            background-color: #4b0082;
+            color: white;
+            border: none;
+            padding: 10px;
+            width: 100%;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s; /* Added transition */
+        }
+        .login-button:hover {
+            background-color: #5a0e94;
+            transform: scale(1.05); /* Button scale effect on hover */
+        }
+        .footer {
+            text-align: center;
+            margin-top: 15px;
+            color: #666;
+            font-size: 12px;
+        }
+        .logo {
+            display: block;
+            margin: 0 auto 20px;
+            width: 120px;
+        }
+        /* === Auth (Login/Register) Card Styling === */
+
+
+.auth-card {
+  background-color: #fff;
+  width: 320px;
+  padding: 25px 30px;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  margin: auto;
+  transition: all 0.4s ease; /* <== Smooth transition */
+  transform: scale(1);        /* Default scale */
+}
+
+/* Optional: Add hover effect for interactivity */
+.auth-card:hover {
+  transform: scale(1.02);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.15);
+}
+.auth-logo {
+  width: 120px;
+  height: 120px;
+  margin-bottom: 15px;
+
+  object-fit: cover;
+  animation: fadeIn 0.5s ease;
+}
+
+
+.auth-card h2 {
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.auth-card input {
+  display: block;
+  width: 90%;
+  margin: 10px auto; /* auto aligns the inputs horizontally */
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+  transition: border 0.3s;
+  box-sizing: border-box;
+}
+
+.auth-card input:focus {
+  border-color: #4a90e2;
+}
+
+.auth-card button {
+  width: 100%;
+  padding: 10px;
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background 0.3s;
+}
+
+.auth-card button:hover {
+  background-color: #357acc;
+}
+
+.auth-card p {
+  margin-top: 12px;
+  font-size: 14px;
+}
+
+.auth-card a {
+  color: #4a90e2;
+  text-decoration: none;
+}
+
+.auth-card a:hover {
+  text-decoration: underline;
+}
+
+/* Smooth fade-in animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+  

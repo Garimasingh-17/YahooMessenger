@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>NeoMessenger</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="header">
+    <div class="logo">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/e/e2/Yahoo%21_Messenger_Logo.png" alt="Logo">
+      <span>NeoMessenger</span>
+    </div>
+    <div class="header-actions">
+      <label class="theme-toggle">
+        🌙 <input type="checkbox" id="themeToggle" /> ☀️
+      </label>
+      <label class="upload-avatar">
+        <input type="file" id="avatarInput" accept="image/*" />
+        📷
+      </label>
+      <div class="user-info">
+        <img id="avatar" src="https://i.pravatar.cc/30?img=2" alt="User" />
+        <span>Manjunath</span>
+      </div>
+    </div>
+  </div>
+
+<!-- Enter Password Modal -->
+<div id="enterPasswordModal" class="login-overlay" style="display: none;">
+  <div class="login-popup">
+    <h3>Enter Password for <span id="enterChatName">Chat</span></h3>
+    <input type="password" id="enteredPassword" placeholder="Enter Password">
+    <button onclick="verifyPassword()">Submit</button>
+    <div id="enterPasswordError" style="color: red; margin-top: 8px;"></div>
+  </div>
+</div>
+
+  <div class="main-container">
+    <div class="sidebar">
+      <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="Search...">
+      </div>
+      <div class="contact-category">Contacts</div>
+      <div id="contactList">
+        <!-- JS will insert contact cards here -->
+      </div>
+    </div>
+    <!-- Settings Button -->
+<button class="settings-toggle" onclick="toggleSettings()">⚙️</button>
+
+<!-- Settings Panel -->
+<div class="settings-panel" id="settingsPanel">
+  <h2>Settings</h2>
+
+  <label>Username:
+    <input type="text" id="settingsName" />
+  </label>
+
+  <label>Change Avatar:
+    <input type="file" id="settingsAvatarInput" accept="image/*" />
+  </label>
+
+  <label>
+    Dark Mode:
+    <input type="checkbox" id="settingsThemeToggle" />
+  </label>
+
+  <label>
+    Show Chats:
+    <input type="checkbox" id="settingsChatToggle" checked />
+  </label>
+
+  <button onclick="saveSettings()">Save</button>
+  <button onclick="toggleSettings()">Close</button>
+</div>
+
+
+    <div class="chat-layout">
+      <div class="chat-window main" id="mainChat">
+        <div class="chat-header">Main Chat</div>
+        <div class="chat-messages" id="mainMessages"></div>
+        <div class="chat-input-container">
+          <textarea class="chat-input" id="mainInput" placeholder="Type a message..."></textarea>
+            <input type="file" class="file-input" id="mainFileInput" onchange="handleFileUpload(event, 'main')" />
+
+          <button class="emoji-btn" data-target="mainInput">😊</button>
+          <button class="chat-send-button" onclick="sendMainMessage()">Send</button>
+        </div>
+      </div>
+      <div class="side-chats" id="sideChats"></div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@joeattardi/emoji-button@4.6.4/dist/index.min.js"></script>
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+  <script src="script.js"></script>
+
+</body>
+</html>

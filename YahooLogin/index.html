@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yahoo Messenger Login</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="authContainer">
+  <div class="auth-card" id="loginCard">
+      <img src="images/yahoo-messenger-logo-png_seeklogo-219465.png" alt="Login Logo" class="auth-logo">
+    <h2>Login</h2>
+    <input type="text" id="loginUsername" placeholder="Username">
+    <input type="password" id="loginPassword" placeholder="Password">
+    <button onclick="loginUser()">Login</button>
+    <p>Don't have an account? <a href="#" onclick="showRegister()">Register here</a></p>
+    <p id="loginError" style="color: red;"></p>
+  </div>
+
+  <div class="auth-card" id="registerCard" style="display: none;">
+      <img src="yahoo-messenger-logo-png_seeklogo-219465.png" alt="Login Logo" class="auth-logo">
+    <h2>Register</h2>
+    <input type="text" id="registerUsername" placeholder="Username">
+    <input type="password" id="registerPassword" placeholder="Password">
+    <button onclick="registerUser()">Register</button>
+    <p>Already have an account? <a href="#" onclick="showLogin()">Login here</a></p>
+    <p id="registerError" style="color: red;"></p>
+  </div>
+</div>
+</body>
+<script src="script.js"></script>
+</html>
