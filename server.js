@@ -69,7 +69,6 @@ socket.on("send-message", ({ to, message, filename, isImage }) => {
   }
 });
 
-
  socket.on("disconnect", () => {
     const username = socket.username;
     if (username && users.has(username)) {
