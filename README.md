@@ -22,7 +22,7 @@ Socket.io for real-time message syncing
 
 Database:
 
-MongoDB for storing users, messages, and group details
+MongoDB for storing users and messages 
 
 Security:
 
