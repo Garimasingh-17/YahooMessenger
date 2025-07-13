@@ -82,7 +82,9 @@ body.light {
   background-color: rgba(255,255,255,0.1);
   border-right: 1px solid #aaa;
   padding: 10px 0;
-  overflow-y: auto;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .search-bar {
@@ -110,6 +112,12 @@ body.light {
   color: #ffccff;
 }
 
+#contactList {
+  flex: 1;
+  overflow-y: auto;
+  padding-bottom: 10px;
+}
+
 .contact {
   display: flex;
   align-items: center;
@@ -133,6 +141,29 @@ body.light {
 .contact-name {
   color: #fff;
   font-size: 14px;
+}
+
+.sidebar-settings-wrapper {
+  padding: 12px 0;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  text-align: center;
+}
+
+.sidebar-settings-wrapper .settings-toggle {
+  background: linear-gradient(to right, var(--purple), var(--light-purple));
+  color: white;
+  border: none;
+  padding: 12px 14px;
+  border-radius: 50%;
+  font-size: 20px;
+  cursor: pointer;
+  box-shadow: 0 0 10px #ffffff50;
+  transition: transform 0.2s, box-shadow 0.3s;
+}
+
+.sidebar-settings-wrapper .settings-toggle:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 12px #ffbaff;
 }
 
 .chat-layout {
@@ -251,27 +282,8 @@ body.light {
 
 .chat-send-button:hover,
 .emoji-btn:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 8px var(--purple);
-}
-.settings-toggle {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  background: var(--purple);
-  color: white;
-  border: none;
-  padding: 12px;
-  border-radius: 50%;
-  cursor: pointer;
-  font-size: 20px;
-  box-shadow: 0 0 10px #fff;
-  z-index: 10;
-  transition: transform 0.3s;
-}
-
-.settings-toggle:hover {
   transform: scale(1.1);
+  box-shadow: 0 0 8px var(--purple);
 }
 
 .settings-panel {
@@ -280,9 +292,12 @@ body.light {
   top: 0;
   width: 280px;
   height: 100%;
-  background: #fff;
-  color: #000;
-  box-shadow: -2px 0 10px rgba(0,0,0,0.5);
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  backdrop-filter: blur(10px);
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: -4px 0 15px rgba(0, 0, 0, 0.4);
+  padding: 20px;
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -295,29 +310,53 @@ body.light {
 }
 
 .settings-panel h2 {
-  margin-top: 0;
+  font-size: 22px;
+  margin-bottom: 15px;
+  text-align: center;
+  color: #ffffff;
 }
 
 .settings-panel label {
   display: flex;
   flex-direction: column;
   font-size: 14px;
+  margin-bottom: 10px;
+  color: #eee;
+}
+
+.settings-panel input[type="text"],
+.settings-panel input[type="file"] {
+  margin-top: 4px;
+  padding: 8px;
+  border-radius: 6px;
+  border: none;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  font-size: 13px;
+}
+
+.settings-panel input[type="checkbox"] {
+  margin-top: 6px;
+  transform: scale(1.2);
 }
 
 .settings-panel button {
-  background: var(--purple);
+  background: linear-gradient(to right, var(--purple), var(--light-purple));
   color: white;
   border: none;
-  padding: 8px;
+  padding: 10px;
   margin-top: 10px;
-  border-radius: 6px;
+  border-radius: 8px;
   cursor: pointer;
-  transition: 0.3s;
+  font-weight: bold;
+  transition: transform 0.2s, box-shadow 0.3s;
 }
 
 .settings-panel button:hover {
-  background: var(--light-purple);
+  transform: scale(1.05);
+  box-shadow: 0 0 8px #ff9bff;
 }
+
 .sent-image {
   max-width: 200px;
   border-radius: 8px;

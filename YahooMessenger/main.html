@@ -36,19 +36,31 @@
     <div id="enterPasswordError" style="color: red; margin-top: 8px;"></div>
   </div>
 </div>
-
-  <div class="main-container">
+<div class="main-container">
     <div class="sidebar">
-      <div class="search-bar">
-        <input type="text" id="searchInput" placeholder="Search...">
-      </div>
-      <div class="contact-category">Contacts</div>
-      <div id="contactList">
-        <!-- JS will insert contact cards here -->
-      </div>
-    </div>
+  <div class="search-bar">
+    <input type="text" id="searchInput" placeholder="Search...">
+  </div>
+  <div class="contact-category">Contacts</div>
+  <div id="contactList"></div>
+
+  <!-- ✅ Proper settings button below contact list -->
+  <div class="sidebar-settings-wrapper">
+    <button class="settings-toggle" onclick="toggleSettings()" title="Settings">⚙️</button>
+  </div>
+</div>
+
+
+  
     <!-- Settings Button -->
-<button class="settings-toggle" onclick="toggleSettings()">⚙️</button>
+<!-- <button class="settings-toggle" onclick="toggleSettings()">⚙️</button> -->
+ <!-- <button class="settings-toggle" onclick="toggleSettings()" title="Open Settings">✨</button> -->
+  <!-- Move this inside .sidebar div (at the end, after contacts)
+<div class="sidebar-settings-btn">
+  <button class="settings-toggle" onclick="toggleSettings()" title="Open Settings">✨</button>
+</div> -->
+
+
 
 <!-- Settings Panel -->
 <div class="settings-panel" id="settingsPanel">
