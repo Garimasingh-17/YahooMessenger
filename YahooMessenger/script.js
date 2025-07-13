@@ -85,52 +85,109 @@ function renderContacts() {
 }
 
 function openChat(name, img) {
-  // ✅ If already open in side chat, prevent duplicate
   if (document.getElementById(`chat-${name}`)) return;
-
-  // ✅ If already shown in main chat, prevent side opening
   if (mainChatUser === name) return;
-if (!firstChatOpened) {
-  // ✅ Use main chat for the first user
-  const header = document.querySelector("#mainChat .chat-header");
-  header.innerText = name;
 
-  const messages = document.getElementById("mainMessages");
-  messages.innerHTML = `<div class="message message-them">Hello from ${name}!</div>`;
+  if (!firstChatOpened) {
+    // ✅ Use main chat for the first user
+    const header = document.querySelector("#mainChat .chat-header");
+    header.innerText = name;
 
-  mainChatUser = name; // ✅ Set before assigning send function
+    const messages = document.getElementById("mainMessages");
+    messages.innerHTML = "";
 
-  const sendBtn = document.querySelector("#mainChat .chat-send-button");
-  sendBtn.onclick = sendMainMessage; // ✅ Use reusable function
+    mainChatUser = name;
+    const sendBtn = document.querySelector("#mainChat .chat-send-button");
+    sendBtn.onclick = sendMainMessage;
 
-  firstChatOpened = true;
-}
- else {
+    firstChatOpened = true;
+
+    // ✅ Load message history for main chat
+    loadChatHistory(name);
+  } else {
     // ✅ Create side chat box
     const chatWindow = document.createElement('div');
     chatWindow.className = 'chat-window side';
     chatWindow.id = `chat-${name}`;
-   chatWindow.innerHTML = `
-  <div class="chat-header">
-    ${name}
-    <button onclick="closeChat('${name}')">✖</button>
-  </div>
-  <div class="chat-messages" id="messages-${name}">
-    <div class="message message-them">Hello from ${name}!</div>
-  </div>
-  <div class="chat-input-container">
-    <textarea class="chat-input" id="input-${name}" placeholder="Reply to ${name}..."></textarea>
-    <input type="file" class="file-input" id="file-${name}" onchange="handleFileUpload(event, '${name}')"/>
-    <button class="emoji-btn" data-target="input-${name}">😊</button>
-    <button class="chat-send-button" onclick="sendMessage('${name}')">Send</button>
-  </div>
-`;
+    chatWindow.innerHTML = `
+      <div class="chat-header">
+        ${name}
+        <button onclick="closeChat('${name}')">✖</button>
+      </div>
+      <div class="chat-messages" id="messages-${name}"></div>
+      <div class="chat-input-container">
+        <textarea class="chat-input" id="input-${name}" placeholder="Reply to ${name}..."></textarea>
+        <input type="file" class="file-input" id="file-${name}" onchange="handleFileUpload(event, '${name}')"/>
+        <button class="emoji-btn" data-target="input-${name}">😊</button>
+        <button class="chat-send-button" onclick="sendMessage('${name}')">Send</button>
+      </div>
+    `;
 
     sideChats.appendChild(chatWindow);
     setupEmojiPicker(`input-${name}`);
     saveChatState(name);
+
+    // ✅ Load message history for side chat
+    loadChatHistory(name);
   }
 }
+
+
+function loadChatHistory(name) {
+  const currentUser = localStorage.getItem("username");
+
+  fetch(`http://localhost:5000/api/messages/${currentUser}/${name}`)
+    .then(res => res.json())
+    .then(data => {
+      const container = (mainChatUser === name)
+        ? document.getElementById("mainMessages")
+        : document.getElementById(`messages-${name}`);
+
+      if (!container) return;
+
+      container.innerHTML = "";
+
+      data.forEach(msg => {
+        const msgDiv = document.createElement("div");
+        msgDiv.className = (msg.sender === currentUser)
+          ? "message message-me"
+          : "message message-them";
+
+        // ✅ Detect [file]:: message (used for files/images)
+        if (msg.message.startsWith("[file]::")) {
+          const parts = msg.message.split("::");
+          const fileName = parts[1];
+          const fileURL = parts[2];
+          const fileType = parts[3];
+
+          if (fileType?.startsWith("image/")) {
+            const img = document.createElement("img");
+            img.src = fileURL;
+            img.style.maxWidth = "200px";
+            img.style.borderRadius = "8px";
+            msgDiv.appendChild(img);
+          } else {
+            const link = document.createElement("a");
+            link.href = fileURL;
+            link.download = fileName;
+            link.textContent = `📎 ${fileName}`;
+            link.target = "_blank";
+            msgDiv.appendChild(link);
+          }
+        } else {
+          // ✅ Regular text message
+          msgDiv.textContent = msg.message;
+        }
+
+        container.appendChild(msgDiv);
+      });
+
+      container.scrollTop = container.scrollHeight;
+    })
+    .catch(err => console.error("❌ Failed to load chat history:", err));
+}
+
+
 
 function closeChat(name) {
   const el = document.getElementById(`chat-${name}`);
